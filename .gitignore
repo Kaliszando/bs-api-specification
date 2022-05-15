@@ -9,4 +9,4 @@
 *.jar
 *.java
 *.class
-target/
+/target/
