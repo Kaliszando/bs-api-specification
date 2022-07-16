@@ -40,6 +40,11 @@
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.threeten</groupId>
+            <artifactId>threetenbp</artifactId>
+            <version>0.7.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -54,16 +59,41 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/test-api.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/openapi.yaml</inputSpec>
                             <language>spring</language>
                             <output>${project.build.directory}/generated-sources/</output>
                             <generateSupportingFiles>false</generateSupportingFiles>
-                            <apiPackage>${groupId}.api</apiPackage>
-                            <modelPackage>${groupId}.api.model</modelPackage>
+                            <apiPackage>${project.groupId}</apiPackage>
+                            <modelPackage>${project.groupId}.model</modelPackage>
                             <configOptions>
                                 <interfaceOnly>true</interfaceOnly>
                             </configOptions>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.5.2</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <configuration>
+                            <target>
+                                <exec dir="${project.basedir}"
+                                        executable="${project.basedir}/run.bat"
+                                        failonerror="true">
+                                </exec>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

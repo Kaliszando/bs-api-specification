@@ -1,0 +1,52 @@
+openapi: 3.0.3
+
+info:
+  title: bs-api-specification
+  description: Bug Stalker - bug tracking system API specification
+  version: 1.0.0
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: kaliszadam99+bugstalker@gmail.com
+  license:
+    name: GPLv3
+    url: https://www.gnu.org/licenses/gpl-3.0.html
+
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+
+servers:
+  - url: /api/v1
+    description: default version of API endpoints
+
+tags:
+  - name: authEndpoint
+    description: Services related to authorization functionality
+  - name: userEndpoint
+    description: Services related to user functionality
+
+
+components:
+  schemas:
+    LoginCredentials:
+      $ref: './components/schemas/LoginCredentials.yaml'
+
+paths:
+  /auth/sign-in:
+    post:
+      tags:
+        - authEndpoint
+      operationId: signIn
+      summary: User login endpoint
+      description: User login consumes json as credentials, using POST method
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginCredentials'
+        description: loginCredntials
+      responses:
+        '200':
+          description: Authorization attempt success, JWT token in header
+        '401':
+          description: Authorization attempt failed, invalid credentials

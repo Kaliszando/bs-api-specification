@@ -10,3 +10,4 @@
 *.java
 *.class
 /target
+/node_modules
