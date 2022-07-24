@@ -19,17 +19,21 @@ servers:
   - url: /api/v1
     description: default version of API endpoints
 
-tags:
-  - name: authEndpoint
-    description: Services related to authorization functionality
-  - name: userEndpoint
-    description: Services related to user functionality
-
-
 components:
   schemas:
-    LoginCredentials:
-      $ref: './components/schemas/LoginCredentials.yaml'
+    LoginCredentialsDto:
+      $ref: './components/LoginCredentialsDto.yaml'
+
+    UserInfoDto:
+      $ref: './components/UserInfoDto.yaml'
+    UserDetailsDto:
+      allOf:
+        - $ref: './components/BaseDetailsDto.yaml'
+        - $ref: './components/UserInfoDto.yaml'
+        - $ref: './components/UserExtendedDto.yaml'
+
+    ProjectInfoDto:
+      $ref: './components/ProjectInfoDto.yaml'
 
 paths:
   /auth/sign-in:
@@ -37,16 +41,70 @@ paths:
       tags:
         - authEndpoint
       operationId: signIn
-      summary: User login endpoint
-      description: User login consumes json as credentials, using POST method
+      description: User login endpoint
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginCredentials'
-        description: loginCredntials
+              $ref: './components/LoginCredentialsDto.yaml'
       responses:
-        '200':
+        '204':
           description: Authorization attempt success, JWT token in header
         '401':
           description: Authorization attempt failed, invalid credentials
+
+  /auth/ping:
+    get:
+      tags:
+        - authEndpoint
+      operationId: ping
+      description: Service endpoint for test purposes
+      responses:
+        '204':
+          description: Server works
+
+  /context:
+    get:
+      tags:
+        - contextEndpoint
+      operationId: getAppContext
+      description: Service returning essential app data
+      responses:
+        '200':
+          description: App data returned succesfully
+          content:
+            application/json:
+              schema:
+                $ref: './components/UserInfoDto.yaml'
+
+  /user/:
+    get:
+      tags:
+        - userEndpoint
+      operationId: getUserByPhrase
+      description: Finds user by given input phrase
+      parameters:
+        - name: query
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User list returned successsfully
+
+  /project/:
+    post:
+      tags:
+        - projectEndpoint
+      operationId: createProject
+      description: Creates project with current user as owner
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './components/ProjectInfoDto.yaml'
+      responses:
+        '201':
+          description: Project created successfully
+        '422':
+          description: Save request is invalid

@@ -1,0 +1,20 @@
+type: object
+required:
+  - version
+  - createdBy
+  - createdOn
+  - modifiedBy
+  - modifiedOn
+properties:
+  version:
+    type: number
+  createdBy:
+    type: string
+  createdOn:
+    type: string
+    format: date
+  modifiedBy:
+    type: string
+  modifiedOn:
+    type: string
+    format: date
