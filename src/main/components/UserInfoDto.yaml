@@ -2,10 +2,12 @@ type: object
 required:
   - email
   - username
-  - role
   - firstName
   - lastName
 properties:
+  id:
+    type: integer
+    format: int64
   email:
     type: string
   username:

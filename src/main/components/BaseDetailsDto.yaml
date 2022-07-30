@@ -1,10 +1,4 @@
 type: object
-required:
-  - version
-  - createdBy
-  - createdOn
-  - modifiedBy
-  - modifiedOn
 properties:
   version:
     type: number
