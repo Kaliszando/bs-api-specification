@@ -1,0 +1,17 @@
+type: object
+properties:
+  version:
+    type: number
+    format: int64
+  createdBy:
+    type: integer
+    format: int64
+  createdOn:
+    type: string
+    format: date-time
+  modifiedBy:
+    type: integer
+    format: int64
+  modifiedOn:
+    type: string
+    format: date-time

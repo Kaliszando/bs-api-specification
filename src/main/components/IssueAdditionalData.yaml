@@ -1,0 +1,21 @@
+type: object
+properties:
+  description:
+    type: string
+  hoursSpent:
+    type: integer
+  daysOld:
+    type: integer
+  components:
+    type: array
+    items:
+      type: string
+  codeVersion:
+    type: string
+  location:
+    type: string
+  attachments:
+    type: array
+    items:
+      type: string
+      format: binary

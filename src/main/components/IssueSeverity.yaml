@@ -1,0 +1,13 @@
+type: object
+required:
+  - issueSeverity
+properties:
+  issueSeverity:
+    type: string
+    enum:
+      - BLOCKER
+      - CRITICAL
+      - MAJOR
+      - NORMAL
+      - MINOR
+      - TRIVIAL

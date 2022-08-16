@@ -1,0 +1,10 @@
+type: object
+properties:
+  id:
+    type: number
+    format: int64
+  content:
+    type: string
+  commenter:
+    type: number
+    fomrat: int64

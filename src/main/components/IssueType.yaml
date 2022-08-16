@@ -1,0 +1,12 @@
+type: object
+required:
+  - issue type
+properties:
+  issueType:
+    type: string
+    enum:
+      - EPIC
+      - TASK
+      - SUBTASK
+      - ENHANCEMENT
+      - BUG

@@ -19,17 +19,69 @@ servers:
   - url: /api/v1
     description: default version of API endpoints
 
-tags:
-  - name: authEndpoint
-    description: Services related to authorization functionality
-  - name: userEndpoint
-    description: Services related to user functionality
-
-
 components:
   schemas:
-    LoginCredentials:
-      $ref: './components/schemas/LoginCredentials.yaml'
+    BaseDetailsDto:
+      $ref: './components/BaseDetailsDto.yaml'
+
+    LoginCredentialsDto:
+      $ref: './components/LoginCredentialsDto.yaml'
+
+    UserInfoDto:
+      $ref: './components/UserInfoDto.yaml'
+    UserDetailsDto:
+      allOf:
+        - $ref: '#/components/schemas/BaseDetailsDto'
+        - $ref: './components/UserInfoDto.yaml'
+        - $ref: './components/UserAdditionalData.yaml'
+
+    ProjectInfoDto:
+      $ref: './components/ProjectInfoDto.yaml'
+
+    Comment:
+      $ref: './components/Comment.yaml'
+    CommentsDto:
+      type: object
+      properties:
+        comments:
+          items:
+            $ref: '#/components/schemas/Comment'
+
+    IssueInfoBase:
+        $ref: './components/IssueInfoBase.yaml'
+    IssueSeverity:
+        $ref: './components/IssueSeverity.yaml'
+    IssueType:
+        $ref: './components/IssueType.yaml'
+    IssueInfoDto:
+      allOf:
+        - $ref: '#/components/schemas/IssueInfoBase'
+        - $ref: './components/IssueSeverity.yaml'
+        - $ref: './components/IssueType.yaml'
+        - type: object
+          properties:
+            reporter:
+              $ref: '#/components/schemas/UserInfoDto'
+            assignee:
+              $ref: '#/components/schemas/UserInfoDto'
+    IssueDetailsDto:
+      allOf:
+        - $ref: '#/components/schemas/BaseDetailsDto'
+        - $ref: './components/IssueInfoBase.yaml'
+        - $ref: './components/IssueSeverity.yaml'
+        - $ref: './components/IssueType.yaml'
+        - $ref: './components/IssueAdditionalData.yaml'
+        - type: object
+          properties:
+            reporter:
+              $ref: '#/components/schemas/UserInfoDto'
+            assignee:
+              $ref: '#/components/schemas/UserInfoDto'
+            fixedBy:
+              $ref: '#/components/schemas/UserInfoDto'
+            verifiedBy:
+              $ref: '#/components/schemas/UserInfoDto'
+
 
 paths:
   /auth/sign-in:
@@ -37,16 +89,153 @@ paths:
       tags:
         - authEndpoint
       operationId: signIn
-      summary: User login endpoint
-      description: User login consumes json as credentials, using POST method
+      description: User login endpoint
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginCredentials'
-        description: loginCredntials
+              $ref: './components/LoginCredentialsDto.yaml'
       responses:
-        '200':
+        '204':
           description: Authorization attempt success, JWT token in header
         '401':
           description: Authorization attempt failed, invalid credentials
+
+  /auth/ping:
+    get:
+      tags:
+        - authEndpoint
+      operationId: ping
+      description: Service endpoint for test purposes
+      responses:
+        '204':
+          description: Server works
+
+  /context:
+    get:
+      tags:
+        - contextEndpoint
+      operationId: getAppContext
+      description: Service returning essential app data
+      responses:
+        '200':
+          description: App data returned succesfully
+          content:
+            application/json:
+              schema:
+                $ref: './components/UserInfoDto.yaml'
+
+  /user:
+    get:
+      tags:
+        - userEndpoint
+      operationId: getUserByPhrase
+      description: Finds user by given input phrase
+      parameters:
+        - name: query
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User list returned successsfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './components/UserInfoDto.yaml'
+
+  /project:
+    post:
+      tags:
+        - projectEndpoint
+      operationId: createProject
+      description: Creates project with current user as owner
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './components/ProjectInfoDto.yaml'
+      responses:
+        '201':
+          description: Project created successfully
+        '422':
+          description: Save request is invalid
+
+    get:
+      tags:
+        - projectEndpoint
+      operationId: getProjects
+      description: Returns list of available projects for current user
+      responses:
+        '200':
+          description: Projects returned successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './components/ProjectInfoDto.yaml'
+
+  /issue:
+    post:
+      tags:
+        - issueEndpoint
+      operationId: createIssue
+      description: Creates new issue
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueDetailsDto'
+      responses:
+        '201':
+          description: Issue created successfully
+
+    get:
+      tags:
+        - issueEndpoint
+      operationId: getAllIssuesByProjectId
+      description: Returns available issues for current project
+      parameters:
+        - name: projectId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Issues returned successfuly
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IssueInfoDto'
+
+  /issue/{tagId}:
+    get:
+      tags:
+        - issueEndpoint
+      operationId: getIssueByTagId
+      description: Returns issue detail by friendly tag id
+      parameters:
+        - name: tagId
+          in: path
+          description: Tag id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Issue returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueDetailsDto'
+        '403':
+          description: User does not have permission for getting issue details
+
+
