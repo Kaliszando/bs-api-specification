@@ -21,6 +21,9 @@ servers:
 
 components:
   schemas:
+    BaseDetailsDto:
+      $ref: './components/BaseDetailsDto.yaml'
+
     LoginCredentialsDto:
       $ref: './components/LoginCredentialsDto.yaml'
 
@@ -28,12 +31,57 @@ components:
       $ref: './components/UserInfoDto.yaml'
     UserDetailsDto:
       allOf:
-        - $ref: './components/BaseDetailsDto.yaml'
+        - $ref: '#/components/schemas/BaseDetailsDto'
         - $ref: './components/UserInfoDto.yaml'
-        - $ref: './components/UserExtendedDto.yaml'
+        - $ref: './components/UserAdditionalData.yaml'
 
     ProjectInfoDto:
       $ref: './components/ProjectInfoDto.yaml'
+
+    Comment:
+      $ref: './components/Comment.yaml'
+    CommentsDto:
+      type: object
+      properties:
+        comments:
+          items:
+            $ref: '#/components/schemas/Comment'
+
+    IssueInfoBase:
+        $ref: './components/IssueInfoBase.yaml'
+    IssueSeverity:
+        $ref: './components/IssueSeverity.yaml'
+    IssueType:
+        $ref: './components/IssueType.yaml'
+    IssueInfoDto:
+      allOf:
+        - $ref: '#/components/schemas/IssueInfoBase'
+        - $ref: './components/IssueSeverity.yaml'
+        - $ref: './components/IssueType.yaml'
+        - type: object
+          properties:
+            reporter:
+              $ref: '#/components/schemas/UserInfoDto'
+            assignee:
+              $ref: '#/components/schemas/UserInfoDto'
+    IssueDetailsDto:
+      allOf:
+        - $ref: '#/components/schemas/BaseDetailsDto'
+        - $ref: './components/IssueInfoBase.yaml'
+        - $ref: './components/IssueSeverity.yaml'
+        - $ref: './components/IssueType.yaml'
+        - $ref: './components/IssueAdditionalData.yaml'
+        - type: object
+          properties:
+            reporter:
+              $ref: '#/components/schemas/UserInfoDto'
+            assignee:
+              $ref: '#/components/schemas/UserInfoDto'
+            fixedBy:
+              $ref: '#/components/schemas/UserInfoDto'
+            verifiedBy:
+              $ref: '#/components/schemas/UserInfoDto'
+
 
 paths:
   /auth/sign-in:
@@ -129,3 +177,65 @@ paths:
                 type: array
                 items:
                   $ref: './components/ProjectInfoDto.yaml'
+
+  /issue:
+    post:
+      tags:
+        - issueEndpoint
+      operationId: createIssue
+      description: Creates new issue
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueDetailsDto'
+      responses:
+        '201':
+          description: Issue created successfully
+
+    get:
+      tags:
+        - issueEndpoint
+      operationId: getAllIssuesByProjectId
+      description: Returns available issues for current project
+      parameters:
+        - name: projectId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Issues returned successfuly
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IssueInfoDto'
+
+  /issue/{tagId}:
+    get:
+      tags:
+        - issueEndpoint
+      operationId: getIssueByTagId
+      description: Returns issue detail by friendly tag id
+      parameters:
+        - name: tagId
+          in: path
+          description: Tag id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Issue returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueDetailsDto'
+        '403':
+          description: User does not have permission for getting issue details
+
+

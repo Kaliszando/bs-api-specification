@@ -1,9 +1,4 @@
 type: object
-required:
-  - email
-  - username
-  - firstName
-  - lastName
 properties:
   id:
     type: integer
