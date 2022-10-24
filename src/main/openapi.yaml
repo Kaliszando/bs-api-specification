@@ -81,6 +81,14 @@ components:
               $ref: '#/components/schemas/UserInfoDto'
             verifiedBy:
               $ref: '#/components/schemas/UserInfoDto'
+    IssuePartialUpdate:
+      properties:
+        tagId:
+          type: string
+        status:
+          type: string
+        backlog:
+          type: string
 
 
 paths:
@@ -215,6 +223,25 @@ paths:
                 items:
                   $ref: '#/components/schemas/IssueInfoDto'
 
+  /issue/update:
+    post:
+      tags:
+        - issueEndpoint
+      operationId: partialIssueUpdate
+      description: Updates issue details and returns updated issue
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssuePartialUpdate'
+      responses:
+        '200':
+          description: Issue updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueDetailsDto'
+
   /issue/{tagId}:
     get:
       tags:
@@ -238,4 +265,23 @@ paths:
         '403':
           description: User does not have permission for getting issue details
 
+    post:
+      tags:
+        - issueEndpoint
+      operationId: updateIssue
+      description: Updates issue details and returns updated issue
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueDetailsDto'
+      responses:
+        '200':
+          description: Issue updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueDetailsDto'
+        '409':
+          description: Optimistic lock exception occured during updating issue
 
