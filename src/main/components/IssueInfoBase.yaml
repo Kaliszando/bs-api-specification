@@ -20,3 +20,5 @@ properties:
       type: string
   epicName:
     type: string
+  backlogList:
+    type: string
