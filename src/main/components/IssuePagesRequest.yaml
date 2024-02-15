@@ -1,0 +1,13 @@
+type: object
+properties:
+  projectId:
+    type: integer
+    format: int64
+  page:
+    type: integer
+  pageSize:
+    type: integer
+required:
+  - projectId
+  - page
+  - pageSize

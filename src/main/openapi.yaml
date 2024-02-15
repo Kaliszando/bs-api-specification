@@ -89,6 +89,23 @@ components:
           type: string
         backlog:
           type: string
+    IssuePagesRequest:
+      $ref: './components/IssuePagesRequest.yaml'
+    IssuePagesResponse:
+      type: object
+      properties:
+        issues:
+          items:
+            $ref: '#/components/schemas/IssueInfoDto'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+      required:
+        - projectId
+        - totalElements
+        - totalPages
 
 
 paths:
@@ -223,6 +240,25 @@ paths:
                 items:
                   $ref: '#/components/schemas/IssueInfoDto'
 
+  /issue/pages:
+    post:
+      tags:
+        - issueEndpoint
+      operationId: getIssuesPaged
+      description: Returns page of available issues in project
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssuePagesRequest'
+      responses:
+        '200':
+          description: Issue pages returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssuePagesResponse'
+
   /issue/update:
     post:
       tags:
@@ -284,4 +320,3 @@ paths:
                 $ref: '#/components/schemas/IssueDetailsDto'
         '409':
           description: Optimistic lock exception occured during updating issue
-
