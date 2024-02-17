@@ -23,6 +23,10 @@ components:
   schemas:
     BaseDetailsDto:
       $ref: './components/BaseDetailsDto.yaml'
+    PageRequest:
+      $ref: './components/PageRequest.yaml'
+    PageData:
+      $ref: './components/PageData.yaml'
 
     LoginCredentialsDto:
       $ref: './components/LoginCredentialsDto.yaml'
@@ -89,23 +93,24 @@ components:
           type: string
         backlog:
           type: string
-    IssuePagesRequest:
-      $ref: './components/IssuePagesRequest.yaml'
-    IssuePagesResponse:
-      type: object
+    IssuePageRequest:
+      allOf:
+        - $ref: '#/components/schemas/PageRequest'
+      properties:
+        projectId:
+          type: integer
+          format: int64
+      required:
+        - projectId
+    IssuePageResponse:
+      allOf:
+        - $ref: '#/components/schemas/PageData'
       properties:
         issues:
           items:
             $ref: '#/components/schemas/IssueInfoDto'
-        totalElements:
-          type: integer
-          format: int64
-        totalPages:
-          type: integer
       required:
-        - projectId
-        - totalElements
-        - totalPages
+        - issues
 
 
 paths:
@@ -240,24 +245,24 @@ paths:
                 items:
                   $ref: '#/components/schemas/IssueInfoDto'
 
-  /issue/pages:
+  /issue/page:
     post:
       tags:
         - issueEndpoint
-      operationId: getIssuesPaged
+      operationId: getIssuePage
       description: Returns page of available issues in project
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/IssuePagesRequest'
+              $ref: '#/components/schemas/IssuePageRequest'
       responses:
         '200':
-          description: Issue pages returned successfully
+          description: Issue page returned successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IssuePagesResponse'
+                $ref: '#/components/schemas/IssuePageResponse'
 
   /issue/update:
     post:
