@@ -23,6 +23,10 @@ components:
   schemas:
     BaseDetailsDto:
       $ref: './components/BaseDetailsDto.yaml'
+    PageRequest:
+      $ref: './components/PageRequest.yaml'
+    PageData:
+      $ref: './components/PageData.yaml'
 
     LoginCredentialsDto:
       $ref: './components/LoginCredentialsDto.yaml'
@@ -89,6 +93,24 @@ components:
           type: string
         backlog:
           type: string
+    IssuePageRequest:
+      allOf:
+        - $ref: '#/components/schemas/PageRequest'
+      properties:
+        projectId:
+          type: integer
+          format: int64
+      required:
+        - projectId
+    IssuePageResponse:
+      allOf:
+        - $ref: '#/components/schemas/PageData'
+      properties:
+        issues:
+          items:
+            $ref: '#/components/schemas/IssueInfoDto'
+      required:
+        - issues
 
 
 paths:
@@ -223,6 +245,25 @@ paths:
                 items:
                   $ref: '#/components/schemas/IssueInfoDto'
 
+  /issue/page:
+    post:
+      tags:
+        - issueEndpoint
+      operationId: getIssuePage
+      description: Returns page of available issues in project
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssuePageRequest'
+      responses:
+        '200':
+          description: Issue page returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssuePageResponse'
+
   /issue/update:
     post:
       tags:
@@ -284,4 +325,3 @@ paths:
                 $ref: '#/components/schemas/IssueDetailsDto'
         '409':
           description: Optimistic lock exception occured during updating issue
-
