@@ -4,6 +4,8 @@ properties:
     type: integer
   pageSize:
     type: integer
+  sortBy:
+    type: string
 required:
   - page
   - pageSize
