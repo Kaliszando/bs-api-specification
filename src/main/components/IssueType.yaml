@@ -1,6 +1,4 @@
 type: object
-required:
-  - issue type
 properties:
   issueType:
     type: string

@@ -93,6 +93,25 @@ components:
           type: string
         backlog:
           type: string
+    IssuePageFilter:
+      allOf:
+        - $ref: '#/components/schemas/IssueType'
+        - $ref: '#/components/schemas/IssueSeverity'
+      properties:
+        query:
+          type: string
+        status:
+          type: string
+        assigneeId:
+          type: integer
+          format: int64
+        reporterId:
+          type: integer
+          format: int64
+        startDate:
+          type: string
+        endDate:
+          type: string
     IssuePageRequest:
       allOf:
         - $ref: '#/components/schemas/PageRequest'
@@ -100,6 +119,8 @@ components:
         projectId:
           type: integer
           format: int64
+        filter:
+          $ref: '#/components/schemas/IssuePageFilter'
       required:
         - projectId
     IssuePageResponse:
@@ -159,13 +180,18 @@ paths:
     get:
       tags:
         - userEndpoint
-      operationId: getUserByPhrase
-      description: Finds user by given input phrase
+      operationId: getUsersByParam
+      description: Finds users by given param
       parameters:
         - name: query
           in: query
           schema:
             type: string
+        - name: projectId
+          in: query
+          schema:
+            type: integer
+            format: int64
       responses:
         '200':
           description: User list returned successsfully
