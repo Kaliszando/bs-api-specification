@@ -1,6 +1,4 @@
 type: object
-required:
-  - issueSeverity
 properties:
   issueSeverity:
     type: string
