@@ -11,3 +11,5 @@
 *.class
 /target
 /node_modules
+/.idea/leetcode/editor.xml
+/.idea/leetcode/statistics.xml
