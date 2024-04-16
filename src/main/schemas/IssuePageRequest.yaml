@@ -1,0 +1,11 @@
+IssuePageRequest:
+  allOf:
+    - $ref: '#/components/schemas/PageRequest'
+  properties:
+    projectId:
+      type: integer
+      format: int64
+    filter:
+      $ref: '#/components/schemas/IssuePageFilter'
+  required:
+    - projectId

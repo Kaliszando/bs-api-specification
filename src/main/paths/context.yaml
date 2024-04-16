@@ -1,0 +1,13 @@
+/context:
+  get:
+    tags:
+      - contextEndpoint
+    operationId: getAppContext
+    description: Service returning essential app data
+    responses:
+      '200':
+        description: App data returned successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInfoDto'

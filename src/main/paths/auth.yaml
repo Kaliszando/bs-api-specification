@@ -1,0 +1,25 @@
+/auth/sign-in:
+  post:
+    tags:
+      - authEndpoint
+    operationId: signIn
+    description: User login endpoint
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LoginCredentialsDto'
+    responses:
+      '204':
+        description: Authorization attempt success, JWT token in header
+      '401':
+        description: Authorization attempt failed, invalid credentials
+/auth/ping:
+  get:
+    tags:
+      - authEndpoint
+    operationId: ping
+    description: Service endpoint for test purposes
+    responses:
+      '204':
+        description: Server works

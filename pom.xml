@@ -8,12 +8,12 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.6.6</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
 
     <groupId>com.bts.bugstalker.api</groupId>
     <artifactId>bs-api-specification</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>bs-api-specification</name>
     <description>bug tracking system API</description>
 
@@ -21,6 +21,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-webmvc-core</artifactId>
+            <version>1.8.0</version>
         </dependency>
         <dependency>
             <groupId>io.swagger</groupId>
@@ -55,44 +60,22 @@
     <build>
         <plugins>
             <plugin>
-<!--                <groupId>org.openapitools</groupId>-->
-<!--                <artifactId>openapi-generator-maven-plugin</artifactId>-->
-<!--                <version>6.2.1</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <goals>-->
-<!--                            <goal>generate</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <skipValidateSpec>true</skipValidateSpec>-->
-<!--                            <inputSpec>${project.basedir}/src/main/openapi.yaml</inputSpec>-->
-<!--                            <generatorName>spring</generatorName>-->
-<!--                            <configOptions>-->
-<!--                                <java8>true</java8>-->
-<!--                                <openApiNullable>false</openApiNullable>-->
-<!--                                <interfaceOnly>true</interfaceOnly>-->
-<!--                            </configOptions>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-                <groupId>io.swagger.codegen.v3</groupId>
-                <artifactId>swagger-codegen-maven-plugin</artifactId>
-                <version>3.0.52</version>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>7.4.0</version>
                 <executions>
                     <execution>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
+                            <skipValidateSpec>true</skipValidateSpec>
                             <inputSpec>${project.basedir}/src/main/openapi.yaml</inputSpec>
-                            <language>spring</language>
-                            <output>${project.build.directory}/generated-sources/</output>
+                            <generatorName>spring</generatorName>
                             <configOptions>
-                                <java8>true</java8>
+                                <openApiNullable>false</openApiNullable>
+                                <interfaceOnly>true</interfaceOnly>
                             </configOptions>
-                            <generateSupportingFiles>false</generateSupportingFiles>
-                            <apiPackage>${project.groupId}</apiPackage>
-                            <modelPackage>${project.groupId}.model</modelPackage>
                         </configuration>
                     </execution>
                 </executions>
@@ -103,26 +86,42 @@
                 <version>2.5.2</version>
             </plugin>
             <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
-                        <phase>install</phase>
-                        <configuration>
-                            <target>
-                                <exec dir="${project.basedir}"
-                                        executable="${project.basedir}/run.bat"
-                                        failonerror="true">
-                                </exec>
-                            </target>
-                        </configuration>
+                        <id>run-python-api-bundler</id>
+                        <phase>validate</phase>
                         <goals>
-                            <goal>run</goal>
+                            <goal>exec</goal>
                         </goals>
+                        <configuration>
+                            <workingDirectory>${project.build.scriptSourceDirectory}</workingDirectory>
+                            <executable>python</executable>
+                            <arguments>
+                                <argument>api-bundler.py</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>run-api-web-gen</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <workingDirectory>${project.basedir}</workingDirectory>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>gen-web</argument>
+                            </arguments>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
     </build>
-
 </project>

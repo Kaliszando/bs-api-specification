@@ -1,0 +1,19 @@
+IssuePageFilter:
+  allOf:
+    - $ref: '#/components/schemas/IssueType'
+    - $ref: '#/components/schemas/IssueSeverity'
+  properties:
+    query:
+      type: string
+    status:
+      type: string
+    assigneeId:
+      type: integer
+      format: int64
+    reporterId:
+      type: integer
+      format: int64
+    startDate:
+      type: string
+    endDate:
+      type: string

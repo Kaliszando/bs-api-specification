@@ -1,0 +1,11 @@
+IssueInfoDto:
+  allOf:
+    - $ref: '#/components/schemas/IssueInfoBase'
+    - $ref: '#/components/schemas/IssueSeverity'
+    - $ref: '#/components/schemas/IssueType'
+    - type: object
+      properties:
+        reporter:
+          $ref: '#/components/schemas/UserInfoDto'
+        assignee:
+          $ref: '#/components/schemas/UserInfoDto'

@@ -1,0 +1,5 @@
+UserDetailsDto:
+  allOf:
+    - $ref: '#/components/schemas/BaseDetailsDto'
+    - $ref: '#/components/schemas/UserInfoDto'
+    - $ref: '#/components/schemas/UserAdditionalData'

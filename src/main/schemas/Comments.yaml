@@ -1,0 +1,6 @@
+Comments:
+  type: object
+  properties:
+    comments:
+      items:
+        $ref: '#/components/schemas/Comment'

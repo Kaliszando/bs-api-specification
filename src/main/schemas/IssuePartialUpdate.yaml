@@ -1,0 +1,8 @@
+IssuePartialUpdate:
+  properties:
+    tagId:
+      type: string
+    status:
+      type: string
+    backlog:
+      type: string

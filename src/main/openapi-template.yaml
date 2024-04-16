@@ -1,0 +1,17 @@
+openapi: 3.0.3
+
+info:
+  title: bs-api-specification
+  description: Bug Stalker - bug tracking system API specification
+  version: 1.0.0
+  contact:
+    email: kaliszadam99+dev@gmail.com
+
+servers:
+  - url: /api/v1
+    description: default version of API endpoints
+
+components:
+  schemas:
+
+paths:
