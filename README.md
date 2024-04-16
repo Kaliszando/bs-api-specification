@@ -31,11 +31,12 @@ In order to generate web services and models you need to install [ng-openapi-gen
 
 ### Prerequisites
 
-- Java 8
+- Java 17
 - Maven
 - Node.js
 - npm
 - [ng-openapi-gen](https://github.com/cyclosproject/ng-openapi-gen)
+- python*
 
 ### Installation
 
@@ -47,11 +48,15 @@ In order to generate web services and models you need to install [ng-openapi-gen
    ```sh
    "gen-web": "ng-openapi-gen --output ../bs-web-client/src/app/api"
    ```
-3. Build API project
+3. Build API project. 
    ```sh
    mvn clean install
    ```
-4. Step `run gen-web` is executed automatically after maven build.
+- `api-bundler.py` runs automatically before install phase. 
+Bundler merges all yaml models from `src/main/schemas` and endpoints from `src/main/schemas`
+into single `openapi.yaml` file.
+- `run gen-web` runs automatically after install phase.
+It generates frontend models and endpoint implementations.
 
 
 <!-- CONTACT -->

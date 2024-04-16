@@ -1,0 +1,16 @@
+ProjectInfoDto:
+  type: object
+  required:
+    - name
+    - tag
+    - description
+  properties:
+    id:
+      type: number
+      format: int64
+    name:
+      type: string
+    tag:
+      type: string
+    description:
+      type: string

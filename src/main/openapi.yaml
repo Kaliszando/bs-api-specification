@@ -1,102 +1,155 @@
 openapi: 3.0.3
-
 info:
   title: bs-api-specification
   description: Bug Stalker - bug tracking system API specification
   version: 1.0.0
-  termsOfService: http://swagger.io/terms/
   contact:
-    email: kaliszadam99+bugstalker@gmail.com
-  license:
-    name: GPLv3
-    url: https://www.gnu.org/licenses/gpl-3.0.html
-
-externalDocs:
-  description: Find out more about Swagger
-  url: http://swagger.io
-
+    email: kaliszadam99+dev@gmail.com
 servers:
-  - url: /api/v1
-    description: default version of API endpoints
-
+- url: /api/v1
+  description: default version of API endpoints
 components:
   schemas:
     BaseDetailsDto:
-      $ref: './components/BaseDetailsDto.yaml'
-    PageRequest:
-      $ref: './components/PageRequest.yaml'
-    PageData:
-      $ref: './components/PageData.yaml'
-
-    LoginCredentialsDto:
-      $ref: './components/LoginCredentialsDto.yaml'
-
+      type: object
+      x-order: 0
+      properties:
+        version:
+          type: integer
+          format: int64
+        createdBy:
+          type: integer
+          format: int64
+        createdOn:
+          type: string
+          format: date-time
+        modifiedBy:
+          type: integer
+          format: int64
+        modifiedOn:
+          type: string
+          format: date-time
+    IssueInfoBase:
+      type: object
+      x-order: 0
+      properties:
+        id:
+          type: integer
+          format: int64
+        projectId:
+          type: integer
+          format: int64
+        tagId:
+          type: string
+        status:
+          type: string
+        name:
+          type: string
+        summary:
+          type: string
+        labels:
+          type: array
+          items:
+            type: string
+        epicName:
+          type: string
+        backlogList:
+          type: string
+    UserAdditionalData:
+      type: object
+      x-order: 0
+      properties:
+        data:
+          type: string
     UserInfoDto:
-      $ref: './components/UserInfoDto.yaml'
-    UserDetailsDto:
-      allOf:
-        - $ref: '#/components/schemas/BaseDetailsDto'
-        - $ref: './components/UserInfoDto.yaml'
-        - $ref: './components/UserAdditionalData.yaml'
-
-    ProjectInfoDto:
-      $ref: './components/ProjectInfoDto.yaml'
-
+      type: object
+      x-order: 0
+      properties:
+        id:
+          type: integer
+          format: int64
+        email:
+          type: string
+        username:
+          type: string
+        role:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
     Comment:
-      $ref: './components/Comment.yaml'
-    CommentsDto:
+      type: object
+      x-order: 10
+      properties:
+        id:
+          type: number
+          format: int64
+        content:
+          type: string
+        commenter:
+          type: number
+          format: int64
+    Comments:
       type: object
       properties:
         comments:
           items:
             $ref: '#/components/schemas/Comment'
-
-    IssueInfoBase:
-        $ref: './components/IssueInfoBase.yaml'
-    IssueSeverity:
-        $ref: './components/IssueSeverity.yaml'
-    IssueType:
-        $ref: './components/IssueType.yaml'
-    IssueInfoDto:
-      allOf:
-        - $ref: '#/components/schemas/IssueInfoBase'
-        - $ref: './components/IssueSeverity.yaml'
-        - $ref: './components/IssueType.yaml'
-        - type: object
-          properties:
-            reporter:
-              $ref: '#/components/schemas/UserInfoDto'
-            assignee:
-              $ref: '#/components/schemas/UserInfoDto'
+    IssueAdditionalData:
+      type: object
+      properties:
+        description:
+          type: string
+        hoursSpent:
+          type: integer
+        daysOld:
+          type: integer
+        components:
+          type: array
+          items:
+            type: string
+        codeVersion:
+          type: string
+        location:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: string
+            format: binary
     IssueDetailsDto:
       allOf:
-        - $ref: '#/components/schemas/BaseDetailsDto'
-        - $ref: './components/IssueInfoBase.yaml'
-        - $ref: './components/IssueSeverity.yaml'
-        - $ref: './components/IssueType.yaml'
-        - $ref: './components/IssueAdditionalData.yaml'
-        - type: object
-          properties:
-            reporter:
-              $ref: '#/components/schemas/UserInfoDto'
-            assignee:
-              $ref: '#/components/schemas/UserInfoDto'
-            fixedBy:
-              $ref: '#/components/schemas/UserInfoDto'
-            verifiedBy:
-              $ref: '#/components/schemas/UserInfoDto'
-    IssuePartialUpdate:
-      properties:
-        tagId:
-          type: string
-        status:
-          type: string
-        backlog:
-          type: string
+      - $ref: '#/components/schemas/BaseDetailsDto'
+      - $ref: '#/components/schemas/IssueInfoBase'
+      - $ref: '#/components/schemas/IssueSeverity'
+      - $ref: '#/components/schemas/IssueType'
+      - $ref: '#/components/schemas/IssueAdditionalData'
+      - type: object
+        properties:
+          reporter:
+            $ref: '#/components/schemas/UserInfoDto'
+          assignee:
+            $ref: '#/components/schemas/UserInfoDto'
+          fixedBy:
+            $ref: '#/components/schemas/UserInfoDto'
+          verifiedBy:
+            $ref: '#/components/schemas/UserInfoDto'
+    IssueInfoDto:
+      allOf:
+      - $ref: '#/components/schemas/IssueInfoBase'
+      - $ref: '#/components/schemas/IssueSeverity'
+      - $ref: '#/components/schemas/IssueType'
+      - type: object
+        properties:
+          reporter:
+            $ref: '#/components/schemas/UserInfoDto'
+          assignee:
+            $ref: '#/components/schemas/UserInfoDto'
     IssuePageFilter:
       allOf:
-        - $ref: '#/components/schemas/IssueType'
-        - $ref: '#/components/schemas/IssueSeverity'
+      - $ref: '#/components/schemas/IssueType'
+      - $ref: '#/components/schemas/IssueSeverity'
       properties:
         query:
           type: string
@@ -114,7 +167,7 @@ components:
           type: string
     IssuePageRequest:
       allOf:
-        - $ref: '#/components/schemas/PageRequest'
+      - $ref: '#/components/schemas/PageRequest'
       properties:
         projectId:
           type: integer
@@ -122,122 +175,147 @@ components:
         filter:
           $ref: '#/components/schemas/IssuePageFilter'
       required:
-        - projectId
+      - projectId
     IssuePageResponse:
       allOf:
-        - $ref: '#/components/schemas/PageData'
+      - $ref: '#/components/schemas/PageData'
       properties:
         issues:
           items:
             $ref: '#/components/schemas/IssueInfoDto'
       required:
-        - issues
-
-
+      - issues
+    IssuePartialUpdate:
+      properties:
+        tagId:
+          type: string
+        status:
+          type: string
+        backlog:
+          type: string
+    IssueSeverity:
+      type: object
+      properties:
+        issueSeverity:
+          type: string
+          enum:
+          - BLOCKER
+          - CRITICAL
+          - MAJOR
+          - NORMAL
+          - MINOR
+          - TRIVIAL
+    IssueType:
+      type: object
+      properties:
+        issueType:
+          type: string
+          enum:
+          - EPIC
+          - TASK
+          - SUBTASK
+          - ENHANCEMENT
+          - BUG
+    LoginCredentialsDto:
+      type: object
+      properties:
+        email:
+          type: string
+          minLength: 1
+        password:
+          type: string
+          minLength: 1
+      required:
+      - email
+      - password
+    PageData:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+      required:
+      - issues
+      - totalElements
+      - totalPages
+    PageRequest:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        sortBy:
+          type: string
+      required:
+      - page
+      - pageSize
+    ProjectInfoDto:
+      type: object
+      required:
+      - name
+      - tag
+      - description
+      properties:
+        id:
+          type: number
+          format: int64
+        name:
+          type: string
+        tag:
+          type: string
+        description:
+          type: string
+    UserDetailsDto:
+      allOf:
+      - $ref: '#/components/schemas/BaseDetailsDto'
+      - $ref: '#/components/schemas/UserInfoDto'
+      - $ref: '#/components/schemas/UserAdditionalData'
 paths:
   /auth/sign-in:
     post:
       tags:
-        - authEndpoint
+      - authEndpoint
       operationId: signIn
       description: User login endpoint
       requestBody:
         content:
           application/json:
             schema:
-              $ref: './components/LoginCredentialsDto.yaml'
+              $ref: '#/components/schemas/LoginCredentialsDto'
       responses:
         '204':
           description: Authorization attempt success, JWT token in header
         '401':
           description: Authorization attempt failed, invalid credentials
-
   /auth/ping:
     get:
       tags:
-        - authEndpoint
+      - authEndpoint
       operationId: ping
       description: Service endpoint for test purposes
       responses:
         '204':
           description: Server works
-
   /context:
     get:
       tags:
-        - contextEndpoint
+      - contextEndpoint
       operationId: getAppContext
       description: Service returning essential app data
       responses:
         '200':
-          description: App data returned succesfully
+          description: App data returned successfully
           content:
             application/json:
               schema:
-                $ref: './components/UserInfoDto.yaml'
-
-  /user:
-    get:
-      tags:
-        - userEndpoint
-      operationId: getUsersByParam
-      description: Finds users by given param
-      parameters:
-        - name: query
-          in: query
-          schema:
-            type: string
-        - name: projectId
-          in: query
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '200':
-          description: User list returned successsfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: './components/UserInfoDto.yaml'
-
-  /project:
-    post:
-      tags:
-        - projectEndpoint
-      operationId: createProject
-      description: Creates project with current user as owner
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: './components/ProjectInfoDto.yaml'
-      responses:
-        '201':
-          description: Project created successfully
-        '422':
-          description: Save request is invalid
-
-    get:
-      tags:
-        - projectEndpoint
-      operationId: getProjects
-      description: Returns list of available projects for current user
-      responses:
-        '200':
-          description: Projects returned successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: './components/ProjectInfoDto.yaml'
-
+                $ref: '#/components/schemas/UserInfoDto'
   /issue:
     post:
       tags:
-        - issueEndpoint
+      - issueEndpoint
       operationId: createIssue
       description: Creates new issue
       requestBody:
@@ -248,33 +326,31 @@ paths:
       responses:
         '201':
           description: Issue created successfully
-
     get:
       tags:
-        - issueEndpoint
+      - issueEndpoint
       operationId: getAllIssuesByProjectId
       description: Returns available issues for current project
       parameters:
-        - name: projectId
-          in: query
-          required: true
-          schema:
-            type: integer
-            format: int64
+      - name: projectId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
       responses:
         '200':
-          description: Issues returned successfuly
+          description: Issues returned successfully
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/IssueInfoDto'
-
   /issue/page:
     post:
       tags:
-        - issueEndpoint
+      - issueEndpoint
       operationId: getIssuePage
       description: Returns page of available issues in project
       requestBody:
@@ -289,11 +365,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/IssuePageResponse'
-
   /issue/update:
     post:
       tags:
-        - issueEndpoint
+      - issueEndpoint
       operationId: partialIssueUpdate
       description: Updates issue details and returns updated issue
       requestBody:
@@ -308,20 +383,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/IssueDetailsDto'
-
   /issue/{tagId}:
     get:
       tags:
-        - issueEndpoint
+      - issueEndpoint
       operationId: getIssueByTagId
       description: Returns issue detail by friendly tag id
       parameters:
-        - name: tagId
-          in: path
-          description: Tag id
-          required: true
-          schema:
-            type: string
+      - name: tagId
+        in: path
+        description: Tag id
+        required: true
+        schema:
+          type: string
       responses:
         '200':
           description: Issue returned successfully
@@ -331,10 +405,9 @@ paths:
                 $ref: '#/components/schemas/IssueDetailsDto'
         '403':
           description: User does not have permission for getting issue details
-
     post:
       tags:
-        - issueEndpoint
+      - issueEndpoint
       operationId: updateIssue
       description: Updates issue details and returns updated issue
       requestBody:
@@ -350,4 +423,59 @@ paths:
               schema:
                 $ref: '#/components/schemas/IssueDetailsDto'
         '409':
-          description: Optimistic lock exception occured during updating issue
+          description: Optimistic lock exception occurred during updating issue
+  /project:
+    post:
+      tags:
+      - projectEndpoint
+      operationId: createProject
+      description: Creates project with current user as owner
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectInfoDto'
+      responses:
+        '201':
+          description: Project created successfully
+        '422':
+          description: Save request is invalid
+    get:
+      tags:
+      - projectEndpoint
+      operationId: getProjects
+      description: Returns list of available projects for current user
+      responses:
+        '200':
+          description: Projects returned successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectInfoDto'
+  /user:
+    get:
+      tags:
+      - userEndpoint
+      operationId: getUsersByParam
+      description: Finds users by given param
+      parameters:
+      - name: query
+        in: query
+        schema:
+          type: string
+      - name: projectId
+        in: query
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: User list returned successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserInfoDto'

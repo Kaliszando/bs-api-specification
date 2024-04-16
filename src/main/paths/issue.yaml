@@ -1,0 +1,117 @@
+/issue:
+  post:
+    tags:
+      - issueEndpoint
+    operationId: createIssue
+    description: Creates new issue
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IssueDetailsDto'
+    responses:
+      '201':
+        description: Issue created successfully
+
+  get:
+    tags:
+      - issueEndpoint
+    operationId: getAllIssuesByProjectId
+    description: Returns available issues for current project
+    parameters:
+      - name: projectId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+    responses:
+      '200':
+        description: Issues returned successfully
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/IssueInfoDto'
+
+/issue/page:
+  post:
+    tags:
+      - issueEndpoint
+    operationId: getIssuePage
+    description: Returns page of available issues in project
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IssuePageRequest'
+    responses:
+      '200':
+        description: Issue page returned successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssuePageResponse'
+
+/issue/update:
+  post:
+    tags:
+      - issueEndpoint
+    operationId: partialIssueUpdate
+    description: Updates issue details and returns updated issue
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IssuePartialUpdate'
+    responses:
+      '200':
+        description: Issue updated successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueDetailsDto'
+
+/issue/{tagId}:
+  get:
+    tags:
+      - issueEndpoint
+    operationId: getIssueByTagId
+    description: Returns issue detail by friendly tag id
+    parameters:
+      - name: tagId
+        in: path
+        description: Tag id
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: Issue returned successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueDetailsDto'
+      '403':
+        description: User does not have permission for getting issue details
+
+  post:
+    tags:
+      - issueEndpoint
+    operationId: updateIssue
+    description: Updates issue details and returns updated issue
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IssueDetailsDto'
+    responses:
+      '200':
+        description: Issue updated successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueDetailsDto'
+      '409':
+        description: Optimistic lock exception occurred during updating issue

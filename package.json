@@ -4,9 +4,7 @@
   "description": "specification project for bug tracking app API",
   "main": "index.js",
   "scripts": {
-    "gen": "ng-openapi-gen",
-    "gen-web": "ng-openapi-gen --output ../bs-web-client/src/app/api",
-    "echo": "echo test"
+    "gen-web": "ng-openapi-gen --output ../bs-web-client/src/app/api"
   },
   "dependencies": {
     "ng-openapi-gen": "^0.21.2"

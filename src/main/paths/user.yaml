@@ -1,0 +1,25 @@
+/user:
+  get:
+    tags:
+      - userEndpoint
+    operationId: getUsersByParam
+    description: Finds users by given param
+    parameters:
+      - name: query
+        in: query
+        schema:
+          type: string
+      - name: projectId
+        in: query
+        schema:
+          type: integer
+          format: int64
+    responses:
+      '200':
+        description: User list returned successfully
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/UserInfoDto'

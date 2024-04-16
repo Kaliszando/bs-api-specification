@@ -1,0 +1,6 @@
+UserAdditionalData:
+  type: object
+  x-order: 0
+  properties:
+    data:
+      type: string

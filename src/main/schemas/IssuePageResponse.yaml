@@ -1,0 +1,9 @@
+IssuePageResponse:
+  allOf:
+    - $ref: '#/components/schemas/PageData'
+  properties:
+    issues:
+      items:
+        $ref: '#/components/schemas/IssueInfoDto'
+  required:
+    - issues

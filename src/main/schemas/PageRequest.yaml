@@ -1,0 +1,12 @@
+PageRequest:
+  type: object
+  properties:
+    page:
+      type: integer
+    pageSize:
+      type: integer
+    sortBy:
+      type: string
+  required:
+    - page
+    - pageSize

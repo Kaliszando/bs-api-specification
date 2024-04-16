@@ -1,0 +1,31 @@
+/project:
+  post:
+    tags:
+      - projectEndpoint
+    operationId: createProject
+    description: Creates project with current user as owner
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProjectInfoDto'
+    responses:
+      '201':
+        description: Project created successfully
+      '422':
+        description: Save request is invalid
+
+  get:
+    tags:
+      - projectEndpoint
+    operationId: getProjects
+    description: Returns list of available projects for current user
+    responses:
+      '200':
+        description: Projects returned successfully
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProjectInfoDto'
