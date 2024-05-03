@@ -21,7 +21,7 @@ enhancing productivity and maintainability of the BugStalker application.
 
 ### Built With
 
-- Swagger + OpenApi 3
+- Swagger + OpenAPI 3
 - [ng-openapi-gen](https://github.com/cyclosproject/ng-openapi-gen)
 
 <!-- GETTING STARTED -->
