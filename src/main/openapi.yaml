@@ -290,6 +290,18 @@ paths:
           description: Authorization attempt success, JWT token in header
         '401':
           description: Authorization attempt failed, invalid credentials
+  /auth/sign-out:
+    post:
+      tags:
+      - authEndpoint
+      operationId: signOut
+      description: User logout endpoint
+      responses:
+        '204':
+          description: Sign out attempt success, JWT token added to blacklist
+        '401':
+          description: Sign out attempt fail, cannot perform action for given JWT
+            token
   /auth/ping:
     get:
       tags:
