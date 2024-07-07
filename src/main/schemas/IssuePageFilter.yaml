@@ -1,11 +1,6 @@
 IssuePageFilter:
-  allOf:
-    - $ref: '#/components/schemas/IssueType'
-    - $ref: '#/components/schemas/IssueSeverity'
   properties:
     query:
-      type: string
-    status:
       type: string
     assigneeId:
       type: integer
@@ -17,3 +12,12 @@ IssuePageFilter:
       type: string
     endDate:
       type: string
+    types:
+      items:
+        $ref: '#/components/schemas/IssueType'
+    severities:
+      items:
+        $ref: '#/components/schemas/IssueSeverity'
+    statuses:
+      items:
+        type: string

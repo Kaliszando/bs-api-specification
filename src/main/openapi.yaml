@@ -147,13 +147,8 @@ components:
           assignee:
             $ref: '#/components/schemas/UserInfoDto'
     IssuePageFilter:
-      allOf:
-      - $ref: '#/components/schemas/IssueType'
-      - $ref: '#/components/schemas/IssueSeverity'
       properties:
         query:
-          type: string
-        status:
           type: string
         assigneeId:
           type: integer
@@ -165,6 +160,15 @@ components:
           type: string
         endDate:
           type: string
+        types:
+          items:
+            $ref: '#/components/schemas/IssueType'
+        severities:
+          items:
+            $ref: '#/components/schemas/IssueSeverity'
+        statuses:
+          items:
+            type: string
     IssuePageRequest:
       allOf:
       - $ref: '#/components/schemas/PageRequest'
