@@ -2,8 +2,6 @@ IssueDetailsDto:
   allOf:
     - $ref: '#/components/schemas/BaseDetailsDto'
     - $ref: '#/components/schemas/IssueInfoBase'
-    - $ref: '#/components/schemas/IssueSeverity'
-    - $ref: '#/components/schemas/IssueType'
     - $ref: '#/components/schemas/IssueAdditionalData'
     - type: object
       properties:
