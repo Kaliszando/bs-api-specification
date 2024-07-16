@@ -24,3 +24,7 @@ IssueInfoBase:
       type: string
     backlogList:
       type: string
+    severity:
+      $ref: '#/components/schemas/IssueSeverity'
+    type:
+      $ref: '#/components/schemas/IssueType'

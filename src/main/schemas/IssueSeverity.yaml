@@ -1,12 +1,9 @@
 IssueSeverity:
-  type: object
-  properties:
-    issueSeverity:
-      type: string
-      enum:
-        - BLOCKER
-        - CRITICAL
-        - MAJOR
-        - NORMAL
-        - MINOR
-        - TRIVIAL
+  type: string
+  enum:
+    - BLOCKER
+    - CRITICAL
+    - MAJOR
+    - NORMAL
+    - MINOR
+    - TRIVIAL

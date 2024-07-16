@@ -55,6 +55,10 @@ components:
           type: string
         backlogList:
           type: string
+        severity:
+          $ref: '#/components/schemas/IssueSeverity'
+        type:
+          $ref: '#/components/schemas/IssueType'
     UserAdditionalData:
       type: object
       x-order: 0
@@ -122,8 +126,6 @@ components:
       allOf:
       - $ref: '#/components/schemas/BaseDetailsDto'
       - $ref: '#/components/schemas/IssueInfoBase'
-      - $ref: '#/components/schemas/IssueSeverity'
-      - $ref: '#/components/schemas/IssueType'
       - $ref: '#/components/schemas/IssueAdditionalData'
       - type: object
         properties:
@@ -138,8 +140,6 @@ components:
     IssueInfoDto:
       allOf:
       - $ref: '#/components/schemas/IssueInfoBase'
-      - $ref: '#/components/schemas/IssueSeverity'
-      - $ref: '#/components/schemas/IssueType'
       - type: object
         properties:
           reporter:
@@ -147,13 +147,8 @@ components:
           assignee:
             $ref: '#/components/schemas/UserInfoDto'
     IssuePageFilter:
-      allOf:
-      - $ref: '#/components/schemas/IssueType'
-      - $ref: '#/components/schemas/IssueSeverity'
       properties:
         query:
-          type: string
-        status:
           type: string
         assigneeId:
           type: integer
@@ -165,6 +160,15 @@ components:
           type: string
         endDate:
           type: string
+        types:
+          items:
+            $ref: '#/components/schemas/IssueType'
+        severities:
+          items:
+            $ref: '#/components/schemas/IssueSeverity'
+        statuses:
+          items:
+            type: string
     IssuePageRequest:
       allOf:
       - $ref: '#/components/schemas/PageRequest'
@@ -194,28 +198,22 @@ components:
         backlog:
           type: string
     IssueSeverity:
-      type: object
-      properties:
-        issueSeverity:
-          type: string
-          enum:
-          - BLOCKER
-          - CRITICAL
-          - MAJOR
-          - NORMAL
-          - MINOR
-          - TRIVIAL
+      type: string
+      enum:
+      - BLOCKER
+      - CRITICAL
+      - MAJOR
+      - NORMAL
+      - MINOR
+      - TRIVIAL
     IssueType:
-      type: object
-      properties:
-        issueType:
-          type: string
-          enum:
-          - EPIC
-          - TASK
-          - SUBTASK
-          - ENHANCEMENT
-          - BUG
+      type: string
+      enum:
+      - EPIC
+      - TASK
+      - SUBTASK
+      - ENHANCEMENT
+      - BUG
     LoginCredentialsDto:
       type: object
       properties:
