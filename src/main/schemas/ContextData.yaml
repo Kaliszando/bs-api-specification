@@ -1,0 +1,11 @@
+ContextData:
+  type: object
+  properties:
+    user:
+      $ref: '#/components/schemas/UserInfoDto'
+    projects:
+      type: array
+      items:
+        $ref: '#/components/schemas/ProjectInfoDto'
+  required:
+    - user
