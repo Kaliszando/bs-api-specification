@@ -100,6 +100,17 @@ components:
         comments:
           items:
             $ref: '#/components/schemas/Comment'
+    ContextData:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserInfoDto'
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectInfoDto'
+      required:
+      - user
     IssueAdditionalData:
       type: object
       properties:
@@ -321,7 +332,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserInfoDto'
+                $ref: '#/components/schemas/ContextData'
   /issue:
     post:
       tags:

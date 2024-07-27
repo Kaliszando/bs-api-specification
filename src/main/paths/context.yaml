@@ -10,4 +10,4 @@
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserInfoDto'
+              $ref: '#/components/schemas/ContextData'
