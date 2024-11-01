@@ -12,7 +12,7 @@ BugStalker projects:
 ## About The Project
 
 The API specification project serves as the backbone for both frontend and backend development in the BugStalker application.
-It defines the API endpoints, data models, and services required for seamless communication between 
+It defines the API endpoints and data models, required for seamless communication between 
 the frontend and backend applications.
 
 In essence, the API Specification project not only documents the endpoints but also provides a mechanism 
@@ -38,6 +38,16 @@ In order to generate web services and models you need to install [ng-openapi-gen
 - [ng-openapi-gen](https://github.com/cyclosproject/ng-openapi-gen)
 - python*
 
+### Maven profiles
+
+- `api-template-bundler` runs `api-bundler.py` before install phase. 
+Bundler merges all yaml models from `src/main/schemas` and endpoints from `src/main/schemas`
+into single `openapi.yaml` file.
+- `backend-code-gen` enables Java jar file generation.
+- `web-code-gen` runs after install phase. 
+It generates frontend models and endpoint implementations.
+
+
 ### Installation
 
 1. Clone the repo
@@ -52,11 +62,6 @@ In order to generate web services and models you need to install [ng-openapi-gen
    ```sh
    mvn clean install
    ```
-- `api-bundler.py` runs automatically before install phase. 
-Bundler merges all yaml models from `src/main/schemas` and endpoints from `src/main/schemas`
-into single `openapi.yaml` file.
-- `run gen-web` runs automatically after install phase.
-It generates frontend models and endpoint implementations.
 
 
 <!-- CONTACT -->
