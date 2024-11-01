@@ -10,25 +10,6 @@ servers:
   description: default version of API endpoints
 components:
   schemas:
-    BaseDetailsDto:
-      type: object
-      x-order: 0
-      properties:
-        version:
-          type: integer
-          format: int64
-        createdBy:
-          type: integer
-          format: int64
-        createdOn:
-          type: string
-          format: date-time
-        modifiedBy:
-          type: integer
-          format: int64
-        modifiedOn:
-          type: string
-          format: date-time
     IssueInfoBase:
       type: object
       x-order: 0
@@ -82,6 +63,25 @@ components:
           type: string
         lastName:
           type: string
+    BaseDetailsDto:
+      type: object
+      x-order: 0
+      properties:
+        version:
+          type: integer
+          format: int64
+        createdBy:
+          type: integer
+          format: int64
+        createdOn:
+          type: string
+          format: date-time
+        modifiedBy:
+          type: integer
+          format: int64
+        modifiedOn:
+          type: string
+          format: date-time
     Comment:
       type: object
       x-order: 10
@@ -94,69 +94,26 @@ components:
         commenter:
           type: number
           format: int64
-    Comments:
+    IssuePartialUpdate:
+      properties:
+        tagId:
+          type: string
+        status:
+          type: string
+        backlog:
+          type: string
+    PageData:
       type: object
       properties:
-        comments:
-          items:
-            $ref: '#/components/schemas/Comment'
-    ContextData:
-      type: object
-      properties:
-        user:
-          $ref: '#/components/schemas/UserInfoDto'
-        projects:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProjectInfoDto'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
       required:
-      - user
-    IssueAdditionalData:
-      type: object
-      properties:
-        description:
-          type: string
-        hoursSpent:
-          type: integer
-        daysOld:
-          type: integer
-        components:
-          type: array
-          items:
-            type: string
-        codeVersion:
-          type: string
-        location:
-          type: string
-        attachments:
-          type: array
-          items:
-            type: string
-            format: binary
-    IssueDetailsDto:
-      allOf:
-      - $ref: '#/components/schemas/BaseDetailsDto'
-      - $ref: '#/components/schemas/IssueInfoBase'
-      - $ref: '#/components/schemas/IssueAdditionalData'
-      - type: object
-        properties:
-          reporter:
-            $ref: '#/components/schemas/UserInfoDto'
-          assignee:
-            $ref: '#/components/schemas/UserInfoDto'
-          fixedBy:
-            $ref: '#/components/schemas/UserInfoDto'
-          verifiedBy:
-            $ref: '#/components/schemas/UserInfoDto'
-    IssueInfoDto:
-      allOf:
-      - $ref: '#/components/schemas/IssueInfoBase'
-      - type: object
-        properties:
-          reporter:
-            $ref: '#/components/schemas/UserInfoDto'
-          assignee:
-            $ref: '#/components/schemas/UserInfoDto'
+      - issues
+      - totalElements
+      - totalPages
     IssuePageFilter:
       properties:
         query:
@@ -180,17 +137,6 @@ components:
         statuses:
           items:
             type: string
-    IssuePageRequest:
-      allOf:
-      - $ref: '#/components/schemas/PageRequest'
-      properties:
-        projectId:
-          type: integer
-          format: int64
-        filter:
-          $ref: '#/components/schemas/IssuePageFilter'
-      required:
-      - projectId
     IssuePageResponse:
       allOf:
       - $ref: '#/components/schemas/PageData'
@@ -200,14 +146,6 @@ components:
             $ref: '#/components/schemas/IssueInfoDto'
       required:
       - issues
-    IssuePartialUpdate:
-      properties:
-        tagId:
-          type: string
-        status:
-          type: string
-        backlog:
-          type: string
     IssueSeverity:
       type: string
       enum:
@@ -217,50 +155,15 @@ components:
       - NORMAL
       - MINOR
       - TRIVIAL
-    IssueType:
-      type: string
-      enum:
-      - EPIC
-      - TASK
-      - SUBTASK
-      - ENHANCEMENT
-      - BUG
-    LoginCredentialsDto:
-      type: object
-      properties:
-        email:
-          type: string
-          minLength: 1
-        password:
-          type: string
-          minLength: 1
-      required:
-      - email
-      - password
-    PageData:
-      type: object
-      properties:
-        totalElements:
-          type: integer
-          format: int64
-        totalPages:
-          type: integer
-      required:
-      - issues
-      - totalElements
-      - totalPages
-    PageRequest:
-      type: object
-      properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        sortBy:
-          type: string
-      required:
-      - page
-      - pageSize
+    IssueInfoDto:
+      allOf:
+      - $ref: '#/components/schemas/IssueInfoBase'
+      - type: object
+        properties:
+          reporter:
+            $ref: '#/components/schemas/UserInfoDto'
+          assignee:
+            $ref: '#/components/schemas/UserInfoDto'
     ProjectInfoDto:
       type: object
       required:
@@ -277,12 +180,148 @@ components:
           type: string
         description:
           type: string
+    PageRequest:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        sortBy:
+          type: string
+      required:
+      - page
+      - pageSize
+    IssuePageRequest:
+      allOf:
+      - $ref: '#/components/schemas/PageRequest'
+      properties:
+        projectId:
+          type: integer
+          format: int64
+        filter:
+          $ref: '#/components/schemas/IssuePageFilter'
+      required:
+      - projectId
+    ContextData:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserInfoDto'
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectInfoDto'
+      required:
+      - user
+    Comments:
+      type: object
+      properties:
+        comments:
+          items:
+            $ref: '#/components/schemas/Comment'
     UserDetailsDto:
       allOf:
       - $ref: '#/components/schemas/BaseDetailsDto'
       - $ref: '#/components/schemas/UserInfoDto'
       - $ref: '#/components/schemas/UserAdditionalData'
+    IssueAdditionalData:
+      type: object
+      properties:
+        description:
+          type: string
+        hoursSpent:
+          type: integer
+        daysOld:
+          type: integer
+        components:
+          type: array
+          items:
+            type: string
+        codeVersion:
+          type: string
+        location:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: string
+            format: binary
+    LoginCredentialsDto:
+      type: object
+      properties:
+        email:
+          type: string
+          minLength: 1
+        password:
+          type: string
+          minLength: 1
+      required:
+      - email
+      - password
+    IssueDetailsDto:
+      allOf:
+      - $ref: '#/components/schemas/BaseDetailsDto'
+      - $ref: '#/components/schemas/IssueInfoBase'
+      - $ref: '#/components/schemas/IssueAdditionalData'
+      - type: object
+        properties:
+          reporter:
+            $ref: '#/components/schemas/UserInfoDto'
+          assignee:
+            $ref: '#/components/schemas/UserInfoDto'
+          fixedBy:
+            $ref: '#/components/schemas/UserInfoDto'
+          verifiedBy:
+            $ref: '#/components/schemas/UserInfoDto'
+    IssueType:
+      type: string
+      enum:
+      - EPIC
+      - TASK
+      - SUBTASK
+      - ENHANCEMENT
+      - BUG
 paths:
+  /context:
+    get:
+      tags:
+      - contextEndpoint
+      operationId: getAppContext
+      description: Service returning essential app data
+      responses:
+        '200':
+          description: App data returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContextData'
+  /user:
+    get:
+      tags:
+      - userEndpoint
+      operationId: getUsersByParam
+      description: Finds users by given param
+      parameters:
+      - name: query
+        in: query
+        schema:
+          type: string
+      - name: projectId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: User list returned successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserInfoDto'
   /auth/sign-in:
     post:
       tags:
@@ -320,19 +359,6 @@ paths:
       responses:
         '204':
           description: Server works
-  /context:
-    get:
-      tags:
-      - contextEndpoint
-      operationId: getAppContext
-      description: Service returning essential app data
-      responses:
-        '200':
-          description: App data returned successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ContextData'
   /issue:
     post:
       tags:
@@ -475,29 +501,3 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProjectInfoDto'
-  /user:
-    get:
-      tags:
-      - userEndpoint
-      operationId: getUsersByParam
-      description: Finds users by given param
-      parameters:
-      - name: query
-        in: query
-        schema:
-          type: string
-      - name: projectId
-        in: query
-        required: true
-        schema:
-          type: integer
-          format: int64
-      responses:
-        '200':
-          description: User list returned successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserInfoDto'
