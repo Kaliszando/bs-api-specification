@@ -220,6 +220,15 @@ components:
         comments:
           items:
             $ref: '#/components/schemas/Comment'
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+      - code
     UserDetailsDto:
       allOf:
       - $ref: '#/components/schemas/BaseDetailsDto'
