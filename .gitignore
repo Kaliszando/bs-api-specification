@@ -13,3 +13,17 @@
 /node_modules
 /.idea/leetcode/editor.xml
 /.idea/leetcode/statistics.xml
+
+# IDE configuration files (local/auto-generated)
+*.iml
+/.idea/misc.xml
+/.idea/vcs.xml
+/.idea/runConfigurations/
+/.idea/inspectionProfiles/
+/.idea/encodings.xml
+/.idea/modules.xml
+
+# Migration state/execution tracking (local only)
+*.migration.state
+*.migration.lock
+copilot.data.migration.local.xml
