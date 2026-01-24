@@ -22,6 +22,7 @@
 /.idea/inspectionProfiles/
 /.idea/encodings.xml
 /.idea/modules.xml
+/.idea/copilot*.xml
 
 # Migration state/execution tracking (local only)
 *.migration.state
