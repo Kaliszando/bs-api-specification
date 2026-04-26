@@ -29,6 +29,16 @@ components:
         modifiedOn:
           type: string
           format: date-time
+    ErrorResponse:
+      type: object
+      x-order: 0
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+      - code
     IssueInfoBase:
       type: object
       x-order: 0
@@ -94,18 +104,23 @@ components:
         commenter:
           type: number
           format: int64
-    PageRequest:
+    Comments:
       type: object
       properties:
-        page:
-          type: integer
-        pageSize:
-          type: integer
-        sortBy:
-          type: string
+        comments:
+          items:
+            $ref: '#/components/schemas/Comment'
+    ContextData:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserInfoDto'
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectInfoDto'
       required:
-      - page
-      - pageSize
+      - user
     IssueAdditionalData:
       type: object
       properties:
@@ -128,11 +143,30 @@ components:
           items:
             type: string
             format: binary
-    UserDetailsDto:
+    IssueDetailsDto:
       allOf:
       - $ref: '#/components/schemas/BaseDetailsDto'
-      - $ref: '#/components/schemas/UserInfoDto'
-      - $ref: '#/components/schemas/UserAdditionalData'
+      - $ref: '#/components/schemas/IssueInfoBase'
+      - $ref: '#/components/schemas/IssueAdditionalData'
+      - type: object
+        properties:
+          reporter:
+            $ref: '#/components/schemas/UserInfoDto'
+          assignee:
+            $ref: '#/components/schemas/UserInfoDto'
+          fixedBy:
+            $ref: '#/components/schemas/UserInfoDto'
+          verifiedBy:
+            $ref: '#/components/schemas/UserInfoDto'
+    IssueInfoDto:
+      allOf:
+      - $ref: '#/components/schemas/IssueInfoBase'
+      - type: object
+        properties:
+          reporter:
+            $ref: '#/components/schemas/UserInfoDto'
+          assignee:
+            $ref: '#/components/schemas/UserInfoDto'
     IssuePageFilter:
       properties:
         query:
@@ -156,6 +190,17 @@ components:
         statuses:
           items:
             type: string
+    IssuePageRequest:
+      allOf:
+      - $ref: '#/components/schemas/PageRequest'
+      properties:
+        projectId:
+          type: integer
+          format: int64
+        filter:
+          $ref: '#/components/schemas/IssuePageFilter'
+      required:
+      - projectId
     IssuePageResponse:
       allOf:
       - $ref: '#/components/schemas/PageData'
@@ -165,6 +210,31 @@ components:
             $ref: '#/components/schemas/IssueInfoDto'
       required:
       - issues
+    IssuePartialUpdate:
+      properties:
+        tagId:
+          type: string
+        status:
+          type: string
+        backlog:
+          type: string
+    IssueSeverity:
+      type: string
+      enum:
+      - BLOCKER
+      - CRITICAL
+      - MAJOR
+      - NORMAL
+      - MINOR
+      - TRIVIAL
+    IssueType:
+      type: string
+      enum:
+      - EPIC
+      - TASK
+      - SUBTASK
+      - ENHANCEMENT
+      - BUG
     LoginCredentialsDto:
       type: object
       properties:
@@ -177,26 +247,6 @@ components:
       required:
       - email
       - password
-    IssuePageRequest:
-      allOf:
-      - $ref: '#/components/schemas/PageRequest'
-      properties:
-        projectId:
-          type: integer
-          format: int64
-        filter:
-          $ref: '#/components/schemas/IssuePageFilter'
-      required:
-      - projectId
-    IssueInfoDto:
-      allOf:
-      - $ref: '#/components/schemas/IssueInfoBase'
-      - type: object
-        properties:
-          reporter:
-            $ref: '#/components/schemas/UserInfoDto'
-          assignee:
-            $ref: '#/components/schemas/UserInfoDto'
     PageData:
       type: object
       properties:
@@ -209,46 +259,18 @@ components:
       - issues
       - totalElements
       - totalPages
-    IssueType:
-      type: string
-      enum:
-      - EPIC
-      - TASK
-      - SUBTASK
-      - ENHANCEMENT
-      - BUG
-    Comments:
+    PageRequest:
       type: object
       properties:
-        comments:
-          items:
-            $ref: '#/components/schemas/Comment'
-    IssueSeverity:
-      type: string
-      enum:
-      - BLOCKER
-      - CRITICAL
-      - MAJOR
-      - NORMAL
-      - MINOR
-      - TRIVIAL
-    IssuePartialUpdate:
-      properties:
-        tagId:
-          type: string
-        status:
-          type: string
-        backlog:
-          type: string
-    ErrorResponse:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        sortBy:
           type: string
       required:
-      - code
+      - page
+      - pageSize
     ProjectInfoDto:
       type: object
       required:
@@ -265,32 +287,11 @@ components:
           type: string
         description:
           type: string
-    IssueDetailsDto:
+    UserDetailsDto:
       allOf:
       - $ref: '#/components/schemas/BaseDetailsDto'
-      - $ref: '#/components/schemas/IssueInfoBase'
-      - $ref: '#/components/schemas/IssueAdditionalData'
-      - type: object
-        properties:
-          reporter:
-            $ref: '#/components/schemas/UserInfoDto'
-          assignee:
-            $ref: '#/components/schemas/UserInfoDto'
-          fixedBy:
-            $ref: '#/components/schemas/UserInfoDto'
-          verifiedBy:
-            $ref: '#/components/schemas/UserInfoDto'
-    ContextData:
-      type: object
-      properties:
-        user:
-          $ref: '#/components/schemas/UserInfoDto'
-        projects:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProjectInfoDto'
-      required:
-      - user
+      - $ref: '#/components/schemas/UserInfoDto'
+      - $ref: '#/components/schemas/UserAdditionalData'
 paths:
   /auth/sign-in:
     post:

@@ -1,5 +1,6 @@
 ErrorResponse:
   type: object
+  x-order: 0
   properties:
     code:
       type: string
