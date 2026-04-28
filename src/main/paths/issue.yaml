@@ -101,13 +101,6 @@
       - issueEndpoint
     operationId: updateIssue
     description: Updates issue details and returns updated issue
-    parameters:
-      - name: tagId
-        in: path
-        description: Tag id
-        required: true
-        schema:
-          type: string
     requestBody:
       content:
         application/json:
